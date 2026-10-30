@@ -1,0 +1,12 @@
+predictors: [PO_PC1, AO_PC1, PO_PC2, AO_PC2, PO_PC3, AO_PC3]
+target: log10_recruitment
+gam:
+  library: pygam.LinearGAM
+  n_splines: 3
+  spline_order: 2
+  regularization: default
+random_forest:
+  n_estimators: 1000
+  max_depth: 5
+  max_features: sqrt
+  random_state: 1

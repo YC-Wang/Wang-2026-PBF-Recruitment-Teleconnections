@@ -1,0 +1,12 @@
+numpy==2.2.6
+pandas==2.3.3
+scipy==1.15.3
+scikit-learn==1.7.2
+joblib==1.6.0
+pygam==0.12.0
+tomli==2.0.1; python_version < "3.11"
+xarray
+netCDF4
+matplotlib
+jupyter
+pytest

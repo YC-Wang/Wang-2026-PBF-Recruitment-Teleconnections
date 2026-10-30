@@ -1,0 +1,7 @@
+Predictors,Model,r,MSE,CV (%),n_years,target_scale,input_file
+SVD teleconnection indices,GAM,0.6764948024560269,0.02684003995554054,2.464054385441145,40,log10(recruitment),data/processed/obs_SVD_LOOCV_raw_1981_2020.csv
+SVD teleconnection indices,RF,0.6675868997610437,0.02724449918392515,1.8382425974115564,40,log10(recruitment),data/processed/obs_SVD_LOOCV_raw_1981_2020.csv
+Regional SST,GAM,0.4558346578725629,0.03901523370599012,1.7921756293255469,40,log10(recruitment),external/table1/SST_regional_timeseries_1981_2020.csv
+Regional SST,RF,0.361083450551063,0.04291433724011279,1.5260806141433165,40,log10(recruitment),external/table1/SST_regional_timeseries_1981_2020.csv
+PDO + AMO,GAM,0.3426640220862598,0.04375814816190301,1.5280961206265469,40,log10(recruitment),external/table1/SVD_mode_recruitment_normalize.csv
+PDO + AMO,RF,0.15072539289742065,0.0553562309224815,1.7576348655161607,40,log10(recruitment),external/table1/SVD_mode_recruitment_normalize.csv

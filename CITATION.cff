@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+title: Pacific bluefin tuna recruitment prediction
+message: Please cite the associated manuscript and this repository when using the code.
+type: software
+authors:
+  - family-names: Research team
+    given-names: Pacific bluefin tuna
+version: 0.1.0
+license: CC-BY-4.0
+repository-code: https://github.com/REPLACE_WITH_REPOSITORY_URL

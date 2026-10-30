@@ -1,0 +1,28 @@
+# Python and notebook caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Local environments and machine-specific configuration
+.venv/
+venv/
+env/
+.conda/
+.env
+.env.*
+*.local
+
+# Temporary and generated test outputs
+tmp/
+temp/
+test_outputs/
+reproducibility_outputs/
+*.log
+
+# Private or external scientific inputs
+data/external/
+data/raw/sst*.nc
+data/raw/*_private*
+external/
+

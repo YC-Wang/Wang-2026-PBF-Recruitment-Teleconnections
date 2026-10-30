@@ -1,0 +1,1 @@
+Raw inputs are not committed by default. Place only data with verified redistribution permission here. Required observational inputs are the 40-fold SVD training CSV and a recruitment CSV with `year` and `recruitment` columns.

@@ -1,0 +1,41 @@
+# Portable observational data configuration.
+data_root_env = "PBF_DATA_ROOT"
+snapshot_id = "workspace-a-2026-10-29"
+snapshot_policy = "read-only; verify SHA-256 before execution"
+
+[inputs]
+sst_monthly = "data/raw/sst.mnmean1.nc"
+observed_recruitment = "data/raw/observed_recruitment_1981_2020.csv"
+fold_predictors = "data/raw/all_40folds_39years_PO_AO_PCs_1981_2020.csv"
+recruitment_realizations_500 = "data/raw/Y_sim_500_samples.csv"
+
+[tracked_inputs]
+heldout_predictors = "repo/data/processed/obs_SVD_LOOCV_raw_1981_2020.csv"
+heldout_predictions = "repo/results/observational/holdout_svd_evaluation/heldout_predictions.csv"
+prediction_intervals = "repo/results/observational/figure4_corrected_loocv/annual_predictions_uncertainty.csv"
+uncertainty_predictions_500 = "repo/results/observational/recruitment_uncertainty/predictions_500.csv"
+
+[sha256]
+sst_monthly = "6fa8c4f848110fdbb616e129b093ee053f4644ef1cdc8872603dbbad07632ca4"
+observed_recruitment = "32cc621d6e2d86ea22821f2293572ed55faa2174d797e574370506526b994c1d"
+fold_predictors = "66fdf7446e83080ae239f47ab6c659799dfdf8e62b4f5b444c3c8d6c7c3741e6"
+recruitment_realizations_500 = "5be88d200c07bffbd2d08ddd9f545db30f3f31761548180320a78f683234b7e8"
+
+[models]
+model_directory = "repo/results/observational/training/models"
+output_directory = "repo/results/observational/reproduction_run"
+
+[execution]
+years_start = 1981
+years_end = 2020
+fold_count = 40
+train_years_per_fold = 39
+predictors = ["PO_PC1", "AO_PC1", "PO_PC2", "AO_PC2", "PO_PC3", "AO_PC3"]
+response_transform = "log10(recruitment)"
+gam_n_splines = 3
+gam_spline_order = 2
+gam_regularization = "pygam default lam"
+rf_n_estimators = 1000
+rf_max_depth = 5
+rf_max_features = "sqrt"
+rf_random_state = 1
