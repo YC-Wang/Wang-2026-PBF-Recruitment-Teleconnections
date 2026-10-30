@@ -27,14 +27,14 @@ The following are external or excluded from this release candidate:
 
 - Original SST NetCDF input; obtain it from an appropriately licensed source.
 - Observed recruitment input; obtain the permitted source snapshot.
-- Fixed `data/raw/Y_sim_500_samples.csv`; excluded from this release staging copy because redistribution/reuse clearance remains pending.
+- Fixed `data/raw/Y_sim_500_samples.csv`; included provisionally in this local release pending redistribution/reuse clearance.
 - Saved GAM/RF fold models; required for exact saved-model evaluation, but excluded pending distribution approval.
 - Exact original xMCA package/version; the authoritative notebook requires `xmca.xarray.xMCA`, but its version is not recorded.
 - DCPP hindcast and prediction inputs, scripts, and experiments are outside the scope of this observational-only repository.
 
 Do not infer that archived figures imply that excluded upstream inputs are publicly available.
 
-**Release-staging exception:** `data/raw/Y_sim_500_samples.csv` is omitted from this pending-clearance staging copy. The archived Figure R2 pathway remains available from `predictions_500.csv` plus the external observed-recruitment input; the full 500-realization refit workflow requires obtaining the omitted file separately.
+The fixed realization file is included provisionally for local workflows. Redistribution and public release remain pending final reuse clearance.
 
 ## Data and model availability
 
@@ -142,7 +142,7 @@ Underlying interval recomputation is a separate, expensive workflow requiring ex
 
 ## Recruitment assessment uncertainty
 
-The downstream workflow requires an assessment-derived set of 500 recruitment realizations rather than 500 independent observations. The required file has 500 rows (`Sim_ID` 1–500) and 40 year columns (1981–2020), with no missing values; values are on the log10 recruitment scale. It is sourced from the ISC (2022) assessment uncertainty information associated with Figure 5-14, p. 135. Redistribution/reuse clearance remains pending, so the file is excluded from this public release. The workflow refits GAM/RF models over 40 LOOCV folds for each realization and summarizes predictions and skill distributions for Table R1 and uncertainty figures. A five-realization smoke test was independently verified. The full 500-realization experiment requires obtaining the external file and has not been independently rerun in the publication environment.
+The downstream workflow uses an assessment-derived set of 500 recruitment realizations rather than 500 independent observations. The included file has 500 rows (`Sim_ID` 1–500) and 40 year columns (1981–2020), with no missing values; values are on the log10 recruitment scale. It is sourced from the ISC (2022) assessment uncertainty information associated with Figure 5-14, p. 135. Redistribution/reuse clearance remains pending, so the file is included provisionally and must not be redistributed until permission is confirmed. The workflow refits GAM/RF models over 40 LOOCV folds for each realization and summarizes predictions and skill distributions for Table R1 and uncertainty figures. A five-realization smoke test was independently verified. The full 500-realization experiment has not been independently rerun in the publication environment.
 
 The documented command shape is:
 
@@ -168,7 +168,7 @@ Generate Figure R2 with:
 python scripts/plot_recruitment_uncertainty_log10.py
 ```
 
-The script requires the external observed recruitment input and archived `results/observational/recruitment_uncertainty/predictions_500.csv`; the archived prediction summaries are sufficient for this lightweight plotting step. Set `PBF_DATA_ROOT` to a read-only approved snapshot containing `data/raw/observed_recruitment_1981_2020.csv` before running. It writes the PNG, PDF, and caption under `results/observational/recruitment_uncertainty/figures/`. It does not refit GAM/RF models or regenerate the 500 realizations. The fixed realization input is excluded from this public release; its verified internal-snapshot SHA-256 is `5be88d200c07bffbd2d08ddd9f545db30f3f31761548180320a78f683234b7e8`, pending redistribution approval.
+The script requires the external observed recruitment input and archived `results/observational/recruitment_uncertainty/predictions_500.csv`; the archived prediction summaries are sufficient for this lightweight plotting step. Set `PBF_DATA_ROOT` to a read-only approved snapshot containing `data/raw/observed_recruitment_1981_2020.csv` before running. It writes the PNG, PDF, and caption under `results/observational/recruitment_uncertainty/figures/`. It does not refit GAM/RF models or regenerate the 500 realizations. The included realization file has SHA-256 `5be88d200c07bffbd2d08ddd9f545db30f3f31761548180320a78f683234b7e8`; redistribution approval remains pending.
 ## Other manuscript outputs
 
 ### Figure R1 — GAM effective degrees of freedom
