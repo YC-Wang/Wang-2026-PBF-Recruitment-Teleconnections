@@ -1,10 +1,27 @@
 # Wang-2026-PBF-Recruitment-Teleconnections
 
-Pacific Bluefin Tuna Recruitment: Observational SVD and GAM/RF Reproducibility
+## Associated Manuscript
 
-This repository accompanies a manuscript submitted to *Ecological Informatics* on Pacific bluefin tuna recruitment variability and its relationships with large-scale ocean–atmosphere teleconnections. It provides code and supporting materials for the observational SVD-based recruitment analyses, GAM/RF leave-one-out cross-validation, and associated figures and tables. DCPP hindcast and prediction analyses are not included.
+**Title:** *Trans-basin teleconnections regulate variability in Pacific bluefin tuna recruitment*
 
-## Repository contents
+**Authors:** Hui-Yu Wang, Wan-Ling Tseng, Je-Wei Sheu, Yi-Chi Wang*
+
+**Status:** Manuscript under review.
+
+This repository provides the code, validated predictors, archived numerical results, and reproducibility workflows supporting the observational analyses presented in the associated manuscript.
+
+The repository supports reproduction of:
+
+- **Figure 4:** Observational recruitment predictions from GAM and Random Forest models, including prediction uncertainty.
+- **Figure R1:** Effective degrees of freedom of the GAM models across 40 leave-one-out cross-validation (LOOCV) folds.
+- **Figure R2:** Recruitment uncertainty propagated through the observational GAM and Random Forest predictions.
+- **Table 1:** Model evaluation statistics for the SVD-based teleconnection predictors using GAM and Random Forest.
+
+The current repository focuses on observational analyses. DCPP prediction experiments are not included.
+
+---
+
+## Repository Overview
 
 ```text
 configs/                         Portable observational path configuration
