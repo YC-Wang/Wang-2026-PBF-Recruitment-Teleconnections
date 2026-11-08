@@ -17,7 +17,7 @@ The repository supports reproduction of:
 - **Figure R2:** Recruitment uncertainty propagated through the observational GAM and Random Forest predictions.
 - **Table 1:** Model evaluation statistics for the SVD-based teleconnection predictors using GAM and Random Forest.
 
-The current repository focuses on observational analyses. DCPP prediction experiments are not included.
+The repository also includes an archived, reproducible evaluation of validated DCPP member-level predictions. Raw DCPP forecast generation and restricted upstream inputs are not included.
 
 ---
 
@@ -29,12 +29,14 @@ jupyternotebook/                 Authoritative SST/SVD notebook
 data/processed/                  Validated predictors and archived numerical inputs
 docs/                           Observational diagnostic documentation
 results/observational/           Archived figures, tables, predictions, and uncertainty summaries
+results/dcpp_predictions/        Archived DCPP member-level prediction CSVs
+results/dcpp_table2_revision/    Archived Table 2 and ensemble verification outputs
 scripts/                         Verification, evaluation, plotting, and workflow entry points
 src/                             Reusable observational code
 tests/                           Lightweight reproducibility tests
 ```
 
-Important scripts include `scripts/verify_observational_inputs.py`, `scripts/evaluate_observational_portable.py`, `scripts/run_observational_portable.py`, `scripts/improve_supplementary_prediction_intervals.py`, and `scripts/run_recruitment_uncertainty_portable.py`.
+Important scripts include `scripts/verify_observational_inputs.py`, `scripts/evaluate_observational_portable.py`, `scripts/run_observational_portable.py`, `scripts/reproduce_figure4_corrected.py`, `scripts/improve_supplementary_prediction_intervals.py`, `scripts/audit_table2_and_ensemble_metrics.py`, and `scripts/run_recruitment_uncertainty_portable.py`.
 
 ## Data requirements and availability
 
@@ -47,7 +49,7 @@ The following are external or excluded from this release candidate:
 - Fixed `data/raw/Y_sim_500_samples.csv`; included provisionally in this local release pending redistribution/reuse clearance.
 - Saved GAM/RF fold models; required for exact saved-model evaluation, but excluded pending distribution approval.
 - Exact original xMCA package/version; the authoritative notebook requires `xmca.xarray.xMCA`, but its version is not recorded.
-- DCPP hindcast and prediction inputs, scripts, and experiments are outside the scope of this observational-only repository.
+- Raw DCPP hindcast inputs, forecast-generation scripts, and experiments are excluded. Archived member-level predictions and their evaluation workflow are included under `results/dcpp_predictions/` and `scripts/audit_table2_and_ensemble_metrics.py`.
 
 Do not infer that archived figures imply that excluded upstream inputs are publicly available.
 
@@ -142,6 +144,7 @@ This checks the 40 archived held-out-year predictions and recalculates Pearson `
 | Figure R1 | `python scripts/plot_figure_R1_GAM_EDF_archived.py` | Archived fold-wise EDF CSV | Verified; no GAM pickles required |
 | Figure R2 | `python scripts/plot_recruitment_uncertainty_log10.py` | Candidate 500-refit predictions plus external observed recruitment via `PBF_DATA_ROOT` | Verified with external snapshot; not self-contained |
 | Table 1 — SVD rows | `python scripts/verify_table1_svd_rows.py` | Archived 40 held-out predictions and reference table | Verified at reported precision; no models required |
+| DCPP Table 2 and ensemble metrics | `python scripts/audit_table2_and_ensemble_metrics.py` | Archived member-level predictions plus `data/processed/recruitment.csv` | Verified; archived evaluation only |
 
 These commands use repository-relative paths and write to the documented result directories, except where an isolated output option is provided. Figure 4 and Figure R2 reproduce archived numerical outputs; they do not recompute prediction intervals or regenerate recruitment realizations. Figure R1 reproduces the archived EDF plot; independent EDF recomputation requires external fitted GAM models. The Table 1 verifier recalculates the archived SVD rows on the `log10(recruitment)` scale.
 
@@ -153,9 +156,27 @@ The authoritative manuscript Figure 4 is `results/observational/figure4_correcte
 python scripts/improve_supplementary_prediction_intervals.py
 ```
 
-This reads `annual_predictions_uncertainty.csv` and writes `fig4.png`, `fig4.svg`, and `fig4_caption.txt` in the Figure 4 results directory. It does not recompute intervals, bootstrap RF models, or refit GAM/RF. The darker shading is the model-only 95% interval, the lighter shading is the approximate combined model-plus-residual-data 95% prediction interval, and dashed boundaries show residual-data variability.
+This reads the archived annual prediction and uncertainty tables and writes `fig4.png`, `fig4.svg`, and `fig4_caption.txt` in the Figure 4 results directory. The workflow retains the 40-fold LOOCV framework for 1981–2020, existing RF point predictions, five-fold cross-validated residual variance, and GAM uncertainty. RF model-estimation variance uses the archived annual uncalibrated `forestci` IJ core with the validated finite-tree correction; it does not claim equivalence to stochastic `forestci(calibrate=True)`. The darker shading is the model-only 95% interval, the lighter shading is the combined model-plus-residual-data 95% prediction interval, and dashed boundaries show residual-data variability.
 
 Underlying interval recomputation is a separate, expensive workflow requiring excluded raw inputs/models and is not run here.
+
+The ordinary public reproduction therefore uses the archived IJ variance by year and does not require fitted RF/GAM model objects. Full IJ recomputation requires the external archived RF models and fold-specific training inputs described in the source validation metadata.
+
+The archived `RF_bootstrap_model_variance` column is retained for historical comparison and is sourced from `annual_ij_vs_bootstrap.csv`; it is not used for the active Figure 4b intervals. The active RF model-estimation variance is the IJ estimate.
+
+## DCPP predictions and ensemble verification
+
+The repository contains five archived member-level DCPP prediction tables for verification years 1981–2010. Leads 1 and 2 contain 117 members per year; leads 3–5 are evaluated by equal member pooling (351 members per year). The archived files use the validated observational SVD bases without an additional sign correction. They support evaluation, not fresh forecast generation.
+
+Run the validated evaluation with:
+
+```powershell
+python scripts/audit_table2_and_ensemble_metrics.py
+```
+
+This reproduces the six Table 2 rows, Pearson correlations, paired BCa confidence intervals from 5,000 resamples using seed `20261107`, climatological MSSS, annual and aggregate ensemble metrics, empirical CRPS, leave-one-year-out reference CRPS, and CRPSS. Outputs are written under `results/dcpp_table2_revision/`. See [DCPP evaluation reproduction](docs/DCPP_EVALUATION_REPRODUCTION.md) for file hashes, definitions, and limitations.
+
+Complete fold-specific SVD/sign metadata and DCPP initialization-year provenance remain unresolved. Regenerating forecasts requires external DCPP NetCDF inputs, observational basis/predictor inputs, observed recruitment, and saved GAM/RF models; this repository does not claim raw DCPP forecast regeneration.
 
 ## Recruitment assessment uncertainty
 
@@ -203,11 +224,11 @@ This command reads the archived fold-wise EDF CSV and regenerates the PNG/PDF us
 | Figure R1 | Archived corrected outputs under `results/observational/diagnostics/figure_R1/`; `scripts/plot_figure_R1_GAM_EDF.py` requires external saved models | Corrected labels validated; fresh regeneration blocked |
 | Table R1 and uncertainty figures | Archived derived summaries/figures plus the five-sample command above | Full rerun not independently verified |
 | Appendix Figure 3 | Source notebook/input closure is not included in this candidate | Not available from this release candidate |
-| DCPP hindcast/prediction analyses | Not included in this repository | Out of scope |
+| DCPP ensemble evaluation | Archived member-level predictions and `scripts/audit_table2_and_ensemble_metrics.py` | Reproduced from archived inputs; raw forecast generation unavailable |
 
 ## Reproducibility status
 
-Independently reproduced: downstream saved-model observational predictions and the five-realization recruitment-uncertainty smoke test. Regenerated from archived numerical data: Figure 4, Figure R1, Figure R2, and selected observational tables. Supplied but not independently rerun: original SST/SVD preprocessing and the full 500-realization experiment. Missing or unresolved: raw-data redistribution, saved-model distribution, exact xMCA version, full realization-generation provenance, and Appendix Figure 3 closure. This repository does not claim to reproduce DCPP analyses.
+Independently reproduced: downstream saved-model observational predictions, the validated RF IJ Figure 4 uncertainty integration, the five-realization recruitment-uncertainty smoke test, and the archived DCPP ensemble evaluation. Regenerated from archived numerical data: Figure 4, Figure R1, Figure R2, selected observational tables, Table 2, and supplementary DCPP ensemble metrics. Supplied but not independently rerun: original SST/SVD preprocessing and the full 500-realization experiment. Missing or unresolved: raw-data redistribution, saved-model distribution, exact xMCA version, full realization-generation provenance, DCPP initialization-year and fold-specific SVD/sign provenance, and Appendix Figure 3 closure. Raw DCPP forecast generation is not claimed.
 
 ## Citation and license
 

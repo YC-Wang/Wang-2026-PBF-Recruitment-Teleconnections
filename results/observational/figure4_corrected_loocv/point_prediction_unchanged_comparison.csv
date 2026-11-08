@@ -1,0 +1,3 @@
+model,max_abs_log10_prediction_difference
+GAM,0.0
+RF,0.0

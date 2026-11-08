@@ -1,0 +1,16 @@
+{
+  "folds": 40,
+  "all_n_train_39": true,
+  "all_1000_tree_models": true,
+  "inbag_reconstructed_with_saved_tree_random_states": true,
+  "all_inbag_columns_sum_to_39": true,
+  "max_point_prediction_difference_tree_mean": 5.062616992290714e-14,
+  "max_point_prediction_difference_vs_existing": 8.881784197001252e-16,
+  "all_ij_finite": true,
+  "negative_ij_count": 0,
+  "forestci_installed": false,
+  "sklearn_version": "1.7.2",
+  "python_version": "3.10.14",
+  "calibrate_true_reproduced": false,
+  "calibration_reason": "forestci unavailable; calibrate=True uses stochastic calibrateEB and was not approximated"
+}

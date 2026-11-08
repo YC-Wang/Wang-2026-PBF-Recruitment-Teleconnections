@@ -1,11 +1,45 @@
 from pathlib import Path
 import matplotlib.pyplot as plt
+import matplotlib as mpl
 import numpy as np
 import pandas as pd
+
+mpl.rcParams["svg.hashsalt"] = "pbf-recruitment-figure4"
 
 root = Path(__file__).resolve().parents[1]
 out = root / "results/observational/figure4_corrected_loocv"
 d = pd.read_csv(out / "annual_predictions_uncertainty.csv").sort_values("year")
+
+def interval_table(method):
+    pred = d[f"{method}_log10_prediction"]
+    model_var = d[f"{method}_model_variance"]
+    residual_var = d[f"{method}_data_variance"]
+    total_var = d[f"{method}_total_variance"]
+    return pd.DataFrame({
+        "year": d.year,
+        "observed_log10_recruitment": d.observed_log10_recruitment,
+        "prediction_log10_recruitment": pred,
+        "model_variance": model_var,
+        "residual_variance": residual_var,
+        "total_variance": total_var,
+        "model_ci_lower": pred - 1.96 * np.sqrt(model_var),
+        "model_ci_upper": pred + 1.96 * np.sqrt(model_var),
+        "residual_interval_lower": pred - 1.96 * np.sqrt(residual_var),
+        "residual_interval_upper": pred + 1.96 * np.sqrt(residual_var),
+        "combined_pi_lower": pred - 1.96 * np.sqrt(total_var),
+        "combined_pi_upper": pred + 1.96 * np.sqrt(total_var),
+    })
+
+gam_intervals = interval_table("GAM")
+rf_intervals = interval_table("RF")
+gam_intervals.to_csv(out / "supplementary_prediction_intervals_gam.csv", index=False)
+rf_intervals.to_csv(out / "supplementary_prediction_intervals_rf.csv", index=False)
+long_intervals = pd.concat([
+    gam_intervals.assign(model="GAM"),
+    rf_intervals.assign(model="RF"),
+], ignore_index=True)
+long_intervals = long_intervals[["year", "model"] + [c for c in gam_intervals.columns if c != "year"]]
+long_intervals.to_csv(out / "supplementary_prediction_intervals_long.csv", index=False)
 
 colors = {"GAM": "#1479B8", "RF": "#D97706"}
 fig, axes = plt.subplots(2, 1, figsize=(13, 8.5), sharex=True, sharey=True,
@@ -69,9 +103,10 @@ fig.tight_layout(rect=[0, 0, 1, 0.97])
 fig.savefig(out / "fig4.png", dpi=300,
             bbox_inches="tight", facecolor="white")
 fig.savefig(out / "fig4.svg",
-            bbox_inches="tight", facecolor="white")
+            bbox_inches="tight", facecolor="white",
+            metadata={"Date": "2000-01-01T00:00:00"})
 plt.close(fig)
 
-caption = """Supplementary Figure. Corrected observational LOOCV recruitment predictions for 1981–2020 on the log10(recruitment) scale. The black line is observed recruitment and the colored line is the year-specific outer-LOOCV prediction from the saved GAM (upper panel) or RF (lower panel). The darker band is the model-only 95% confidence interval, defined as prediction ± 1.96 × sqrt(model variance). The lighter band is the approximate combined 95% prediction interval, defined by adding model variance and residual data variance. Thin dashed boundaries show the data-only residual variability interval, prediction ± 1.96 × sqrt(residual variance). Residual data variance represents unexplained recruitment variability estimated by inner five-fold CV within each 39-year outer-training fold; it is not recruitment assessment or measurement uncertainty. The intervals are approximate, conditional on the existing outer-fold SVD representation, and are not fully nested or formally calibrated."""
+caption = """Supplementary Figure. Corrected observational LOOCV recruitment predictions for 1981–2020 on the log10(recruitment) scale. The black line is observed recruitment and the colored line is the year-specific outer-LOOCV prediction from the saved GAM (upper panel) or RF (lower panel). The darker band is the model-only 95% confidence interval, defined as prediction ± 1.96 × sqrt(model variance). The lighter band is the approximate combined 95% prediction interval, defined by adding model variance and residual data variance. For RF, model variance is the archived uncalibrated forestci infinitesimal-jackknife core with finite-tree bias correction; stochastic forestci calibrate=True calibration was not reproduced. Thin dashed boundaries show the data-only residual variability interval, prediction ± 1.96 × sqrt(residual variance). Residual data variance represents unexplained recruitment variability estimated by inner five-fold CV within each 39-year outer-training fold; it is not recruitment assessment or measurement uncertainty. The intervals are approximate, conditional on the existing outer-fold SVD representation, and are not fully nested or formally calibrated."""
 (out / "fig4_caption.txt").write_text(caption, encoding="utf-8")
 print("saved improved supplementary figures and caption")
