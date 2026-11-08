@@ -69,24 +69,6 @@ if previous.exists():
     })
     point_compare.to_csv(OUT / "point_prediction_unchanged_comparison.csv", index=False)
 
-plt.style.use("seaborn-v0_8-whitegrid")
-fig, ax = plt.subplots(figsize=(12, 6)); x = pred.observed_log10_recruitment
-for method, color, marker in (("GAM", "#0072B2", "o"), ("RF", "#D55E00", "s")):
-    y = pred[f"{method}_log10_prediction"]; ax.scatter(x, y, color=color, marker=marker, alpha=.8, label=method)
-    slope, intercept = np.polyfit(x, y, 1); xx = np.linspace(x.min(), x.max(), 100); ax.plot(xx, intercept+slope*xx, color=color, linewidth=2)
-ax.plot([x.min(),x.max()],[x.min(),x.max()],"k--",linewidth=1); ax.set(xlabel="Observed log10 recruitment", ylabel="Predicted log10 recruitment", title="Figure 4: corrected observational LOOCV"); ax.legend(); fig.tight_layout()
-for ext in ("png", "svg", "pdf"): fig.savefig(OUT / f"fig4_diagnostic.{ext}", dpi=220 if ext=="png" else None)
-plt.close(fig)
-
-fig, axes = plt.subplots(2, 1, figsize=(12, 8), sharex=True)
-for ax, method, color in zip(axes, ("GAM", "RF"), ("#0072B2", "#D55E00")):
-    ax.plot(pred.year, pred.observed_log10_recruitment, "k-", label="Observed recruitment")
-    ax.plot(pred.year, pred[f"{method}_log10_prediction"], color=color, label=method)
-    ax.fill_between(pred.year, pred[f"{method}_model_lower"], pred[f"{method}_model_upper"], color=color, alpha=.18, label="Model-only 95% CI")
-    ax.fill_between(pred.year, pred[f"{method}_PI_lower"], pred[f"{method}_PI_upper"], color=color, alpha=.08, label="Combined 95% PI")
-    ax.set_ylabel("log10 recruitment"); ax.set_title(method); ax.legend(loc="best")
-axes[-1].set_xlabel("Year"); fig.tight_layout(); fig.savefig(OUT / "fig4_diagnostic_intervals.png", dpi=220); plt.close(fig)
-
 report = f"""# Corrected Figure 4 observational LOOCV
 
 The original visual reference was `data/code/original_draft/GAM_RF_predicted.ipynb`. Its alternative `JP_TROLL_CPUE` branch was not used. This public reproduction consumes the archived annual prediction table and archived IJ variance table; it does not require the external fitted models for ordinary figure regeneration.

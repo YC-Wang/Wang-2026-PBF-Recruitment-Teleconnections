@@ -1,7 +1,10 @@
 from pathlib import Path
 import matplotlib.pyplot as plt
+import matplotlib as mpl
 import numpy as np
 import pandas as pd
+
+mpl.rcParams["svg.hashsalt"] = "pbf-recruitment-figure4"
 
 root = Path(__file__).resolve().parents[1]
 out = root / "results/observational/figure4_corrected_loocv"
@@ -100,7 +103,8 @@ fig.tight_layout(rect=[0, 0, 1, 0.97])
 fig.savefig(out / "fig4.png", dpi=300,
             bbox_inches="tight", facecolor="white")
 fig.savefig(out / "fig4.svg",
-            bbox_inches="tight", facecolor="white")
+            bbox_inches="tight", facecolor="white",
+            metadata={"Date": "2000-01-01T00:00:00"})
 plt.close(fig)
 
 caption = """Supplementary Figure. Corrected observational LOOCV recruitment predictions for 1981–2020 on the log10(recruitment) scale. The black line is observed recruitment and the colored line is the year-specific outer-LOOCV prediction from the saved GAM (upper panel) or RF (lower panel). The darker band is the model-only 95% confidence interval, defined as prediction ± 1.96 × sqrt(model variance). The lighter band is the approximate combined 95% prediction interval, defined by adding model variance and residual data variance. For RF, model variance is the archived uncalibrated forestci infinitesimal-jackknife core with finite-tree bias correction; stochastic forestci calibrate=True calibration was not reproduced. Thin dashed boundaries show the data-only residual variability interval, prediction ± 1.96 × sqrt(residual variance). Residual data variance represents unexplained recruitment variability estimated by inner five-fold CV within each 39-year outer-training fold; it is not recruitment assessment or measurement uncertainty. The intervals are approximate, conditional on the existing outer-fold SVD representation, and are not fully nested or formally calibrated."""
