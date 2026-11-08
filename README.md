@@ -162,6 +162,8 @@ Underlying interval recomputation is a separate, expensive workflow requiring ex
 
 The ordinary public reproduction therefore uses the archived IJ variance by year and does not require fitted RF/GAM model objects. Full IJ recomputation requires the external archived RF models and fold-specific training inputs described in the source validation metadata.
 
+The archived `RF_bootstrap_model_variance` column is retained for historical comparison and is sourced from `annual_ij_vs_bootstrap.csv`; it is not used for the active Figure 4b intervals. The active RF model-estimation variance is the IJ estimate.
+
 ## DCPP predictions and ensemble verification
 
 The repository contains five archived member-level DCPP prediction tables for verification years 1981–2010. Leads 1 and 2 contain 117 members per year; leads 3–5 are evaluated by equal member pooling (351 members per year). The archived files use the validated observational SVD bases without an additional sign correction. They support evaluation, not fresh forecast generation.

@@ -19,14 +19,26 @@ assert pred.year.tolist() == list(range(1981, 2021))
 assert ij.year.tolist() == pred.year.tolist() and len(ij) == 40
 for col in ("RF_log10_prediction", "RF_data_variance", "observed_log10_recruitment"):
     assert np.allclose(pred[col].to_numpy(), ij[col if col != "RF_data_variance" else col].to_numpy(), rtol=0, atol=1e-12)
-pred["RF_bootstrap_model_variance"] = pred["RF_model_variance"]
+# Keep the historical bootstrap estimate available for comparison. The IJ
+# validation table is the authoritative archived source for both estimators;
+# do not derive or overwrite the bootstrap column from IJ values.
+pred["RF_bootstrap_model_variance"] = ij["bootstrap_RF_model_variance"]
 pred["RF_model_variance"] = ij["IJ_bias_corrected_variance"]
 pred["RF_total_variance"] = pred["RF_model_variance"] + pred["RF_data_variance"]
 pred["RF_model_lower"] = pred["RF_log10_prediction"] - 1.96 * np.sqrt(pred["RF_model_variance"])
 pred["RF_model_upper"] = pred["RF_log10_prediction"] + 1.96 * np.sqrt(pred["RF_model_variance"])
 pred["RF_PI_lower"] = pred["RF_log10_prediction"] - 1.96 * np.sqrt(pred["RF_total_variance"])
 pred["RF_PI_upper"] = pred["RF_log10_prediction"] + 1.96 * np.sqrt(pred["RF_total_variance"])
-pred.to_csv(OUT / "annual_predictions_uncertainty.csv", index=False)
+existing = pd.read_csv(OUT / "annual_predictions_uncertainty.csv").sort_values("year").reset_index(drop=True)
+same = list(existing.columns) == list(pred.columns) and len(existing) == len(pred)
+if same:
+    for col in pred.columns:
+        if pd.api.types.is_numeric_dtype(pred[col]):
+            same = same and np.allclose(existing[col].to_numpy(), pred[col].to_numpy(), rtol=0, atol=1e-12)
+        else:
+            same = same and existing[col].equals(pred[col])
+if not same:
+    pred.to_csv(OUT / "annual_predictions_uncertainty.csv", index=False)
 
 metrics = []
 for method in ("GAM", "RF"):
