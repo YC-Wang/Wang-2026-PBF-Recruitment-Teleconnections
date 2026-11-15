@@ -49,7 +49,7 @@ Use isolated output directories and never overwrite archived references.
 
 See [results/observational/README.md](results/observational/README.md) for observational outputs, [results/observational/recruitment_uncertainty/cv_lognormal_2026](results/observational/recruitment_uncertainty/cv_lognormal_2026) for the final CV-based uncertainty experiment, and [results/dcpp_table_s3b_revision/README.md](results/dcpp_table_s3b_revision/README.md) for Table S3.
 
-Table 2 reproduction from archived member-level DCPP predictions is documented in [docs/DCPP_EVALUATION_REPRODUCTION.md](docs/DCPP_EVALUATION_REPRODUCTION.md). Raw DCPP forecast generation, CRPS/CRPSS workflows beyond the retained verification metrics, Figure S3.1, and unrelated DCPP experiments remain outside this publication workflow.
+Table 2 reproduction from archived member-level DCPP predictions is documented in [docs/DCPP_EVALUATION_REPRODUCTION.md](docs/DCPP_EVALUATION_REPRODUCTION.md).
 
 The derived DCPP predictors are attributed to the CMIP6 Decadal Climate Prediction Project (DCPP); see the [official CMIP6 DCPP page](https://www.wcrp-climate.org/dcpp). Dataset-specific source identifiers and current per-model license records are not independently verified in this archive; see [data availability](docs/DATA_AVAILABILITY.md) for the limitation.
 
