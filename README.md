@@ -21,6 +21,8 @@ Table S3 calculates correlations between observational held-out SVD predictors a
 - [Figure 1 notebook](jupyternotebook/Fig1_PBF_correlation.ipynb), [Figure 2 notebook](jupyternotebook/Fig2_LOOCV_SVD_40fold.ipynb), [Figure 3 notebook](jupyternotebook/Fig3_SVD_SST_CHL_correlation.ipynb), and [Table 1 notebook](jupyternotebook/Table1_PDOAMO_region.ipynb): original manuscript entry points.
 - [results/observational](results/observational/): observational outputs.
 - [results/dcpp_table_s3b_revision](results/dcpp_table_s3b_revision/): Table S3.
+- [results/dcpp_table2_revision](results/dcpp_table2_revision/): archived DCPP Table 2 and ensemble verification.
+- [results/dcpp_predictions/svd_predictors](results/dcpp_predictions/svd_predictors/): archived observational-SVD-projected DCPP predictors for the approved Table 2/Table S3 scope.
 - [scripts](scripts/): verification and reproduction entry points.
 - [src](src/): reusable code.
 - [tests](tests/): lightweight checks.
@@ -44,7 +46,9 @@ Use isolated output directories and never overwrite archived references.
 
 See [results/observational/README.md](results/observational/README.md) for observational outputs, [results/observational/recruitment_uncertainty/cv_lognormal_2026](results/observational/recruitment_uncertainty/cv_lognormal_2026) for the final CV-based uncertainty experiment, and [results/dcpp_table_s3b_revision/README.md](results/dcpp_table_s3b_revision/README.md) for Table S3.
 
-Complete DCPP recruitment prediction, Table 2, CRPS/CRPSS verification, Figure S3.1, and unrelated DCPP experiments are outside this publication workflow.
+Table 2 reproduction from archived member-level DCPP predictions is documented in [docs/DCPP_EVALUATION_REPRODUCTION.md](docs/DCPP_EVALUATION_REPRODUCTION.md). Raw DCPP forecast generation, CRPS/CRPSS workflows beyond the retained verification metrics, Figure S3.1, and unrelated DCPP experiments remain outside this publication workflow.
+
+The derived DCPP predictors are attributed to the CMIP6 Decadal Climate Prediction Project (DCPP); see the [official CMIP6 DCPP page](https://www.wcrp-climate.org/dcpp). Dataset-specific source identifiers and current per-model license records are not independently verified in this archive; see [data availability](docs/DATA_AVAILABILITY.md) for the limitation.
 
 ## Data availability
 

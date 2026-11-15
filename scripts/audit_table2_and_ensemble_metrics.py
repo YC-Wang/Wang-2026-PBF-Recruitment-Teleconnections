@@ -1,0 +1,30 @@
+import argparse
+from pathlib import Path
+import numpy as np, pandas as pd
+from scipy.stats import pearsonr, bootstrap, linregress
+R=Path(__file__).resolve().parents[1]
+parser=argparse.ArgumentParser(description='Recalculate DCPP Table 2 and ensemble verification metrics.')
+parser.add_argument('--output-dir', type=Path, default=R/'results/dcpp_table2_revision', help='Directory for all generated CSV and Markdown outputs.')
+args=parser.parse_args()
+O=args.output_dir.resolve(); E=O/'ensemble_verification'; O.mkdir(parents=True,exist_ok=True); E.mkdir(exist_ok=True); years=np.arange(1981,2011); models=['GAM','RF'];
+obs=np.log10(pd.read_csv(R/'data/raw/observed_recruitment_1981_2020.csv').set_index('year').loc[years,'recruitment'].to_numpy())
+def crps(x,y): x=np.sort(x); n=len(x); return np.mean(abs(x-y))-np.sum((2*np.arange(1,n+1)-n-1)*x)/n**2
+def ci(a,b):
+ def f(x,y,axis=-1):
+  x=x-x.mean(axis=axis,keepdims=True); y=y-y.mean(axis=axis,keepdims=True); return (x*y).sum(axis=axis)/np.sqrt((x*x).sum(axis=axis)*(y*y).sum(axis=axis))
+ r=bootstrap((a,b),f,paired=True,vectorized=True,method='BCa',n_resamples=5000,random_state=20261107).confidence_interval; return r.low,r.high
+groups={}; annual=[]
+for lead in [1,2]:
+ d=pd.read_csv(R/f'results/dcpp_predictions/lead{lead}_obs_aligned_pooled_loyo/lead{lead}_member_recruitment_predictions.csv'); groups[f'Lead {lead}']=d
+d=pd.concat([pd.read_csv(R/f'results/dcpp_predictions/lead{l}_obs_aligned_pooled_loyo/lead{l}_member_recruitment_predictions.csv') for l in [3,4,5]],ignore_index=True); groups['Lead 3-5']=d
+table=[]; ensemble=[]
+for label,d in groups.items():
+ for model in models:
+  col=f'{model}_pred_log10'; X=d.pivot_table(index='verification_year',columns='member',values=col,aggfunc='first').loc[years].to_numpy(); mean=X.mean(1); lo=np.quantile(X,.05,1); hi=np.quantile(X,.95,1); r=pearsonr(obs,mean).statistic; low,high=ci(obs,mean); mse=np.mean((obs-mean)**2); msss=1-mse/np.mean((obs-obs.mean())**2); fit=linregress(np.arange(30),mean); ofit=linregress(np.arange(30),obs); er=mean-(fit.intercept+fit.slope*np.arange(30)); eo=obs-(ofit.intercept+ofit.slope*np.arange(30)); table.append({'Fitting method':model,'Lead':label,'r':r,'r_ci_low':low,'r_ci_high':high,'r_95_CI':f'{r:.2f} ({low:.2f},{high:.2f})','MSSS':msss});
+  ref=np.array([crps(np.delete(obs,i),obs[i]) for i in range(30)]); cs=np.array([crps(X[i],obs[i]) for i in range(30)]); ensemble += [{'lead_group':label,'model':model,'verification_year':years[i],'n_members':X.shape[1],'ensemble_mean':mean[i],'ensemble_median':np.median(X[i]),'ensemble_sd':X[i].std(ddof=1),'p05':lo[i],'p95':hi[i],'crps':cs[i],'reference_crps':ref[i],'covered90':lo[i]<=obs[i]<=hi[i],'observed':obs[i]} for i in range(30)]
+  ensemble.append({'lead_group':label,'model':model,'aggregate':True,'mean_crps':cs.mean(),'crpss':1-cs.mean()/ref.mean(),'coverage90':np.mean((obs>=lo)&(obs<=hi)),'mean_width90':np.mean(hi-lo),'pearson_r':r,'rmse':np.sqrt(mse),'mse':mse,'bias':np.mean(mean-obs),'detrended_r':pearsonr(eo,er).statistic,'first_difference_r':pearsonr(np.diff(obs),np.diff(mean)).statistic})
+pd.DataFrame(table).to_csv(O/'table2_revised.csv',index=False); ed=pd.DataFrame(ensemble); ed.to_csv(E/'ensemble_annual_metrics.csv',index=False); ed[ed.get('aggregate',False)==True].to_csv(E/'ensemble_aggregate_metrics.csv',index=False); ed[ed.get('aggregate',False)!=True].to_csv(E/'ensemble_crps_reference.csv',index=False)
+(O/'original_table2_pipeline_audit.md').write_text('''# Original Table 2 pipeline audit\n\nThe authoritative producer is `table2/reproduce_table2_clean.py` in the original repository. It reads annual ensemble-mean prediction columns from `ensemble_predict_log_recruitmember_lead1_lead10_*_SVD.csv`, evaluates 30 annual values, calculates Pearson r, BCa bootstrap 95% correlation intervals with 1,000 resamples, and defines MSSS as 1 minus model MSE divided by MSE from the observed-mean climatology. The revised analysis uses the same annual verification convention but current validated member-level predictions and pooled Leads 3–5.\n''',encoding='utf8')
+(O/'table2_statistical_methods.md').write_text('''Correlation intervals use paired BCa bootstrap resampling of the 30 annual verification years (5,000 resamples). MSSS uses the leave-period observed-mean climatology as the reference, matching the original script. The pooled Lead 3–5 ensemble contains 351 predictions per year, but skill is evaluated on 30 annual ensemble means; members and lead-year pairs are not treated as independent verification cases.\n''',encoding='utf8')
+(O/'table2_original_vs_revised.md').write_text('''The historical Table 2 values are not carried forward as revised results. The revised rows are computed from the current validated DCPP predictions. Historical reproduction is documented in the original repository's table2 CSV; the current Lead 3–5 group is a new 351-member pooled ensemble.\n''',encoding='utf8')
+(E/'ensemble_verification_report.md').write_text('''The ensemble verification uses raw member-level log10 recruitment predictions. CRPS and empirical 90% coverage use the 117-member Lead 1/2 distributions or 351-member pooled Lead 3–5 distribution. Envelopes are raw ensemble spread, not calibrated prediction intervals. The observed climatological CRPS reference excludes the target year and is retrospective.\n''',encoding='utf8'); print(pd.DataFrame(table).to_string(index=False)); print(ed[ed.get('aggregate',False)==True].to_string(index=False))
