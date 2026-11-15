@@ -1,8 +1,11 @@
-# Pacific Bluefin Tuna Recruitment
+## Manuscript citation
+Wang, H.-Y., Tseng, W.-L., Sheu, J.-W., & Wang, Y.-C. (2026). *Trans-basin teleconnections regulate variability in Pacific bluefin tuna recruitment*. Manuscript submitted to *Ecological Informatics*.
 
-## Study objective
+## About this repository
 
-This repository supports reproducible analysis of Pacific bluefin tuna recruitment variability and its relationships with large-scale ocean–atmosphere teleconnections.
+This repository provides the reproducibility materials supporting **Wang et al. (2026)**, including observational SVD analysis, GAM/RF recruitment predictions, recruitment uncertainty experiments, and retrospective DCPP evaluation.
+
+Some upstream datasets and model artifacts are not redistributed. See `docs/DATA_AVAILABILITY.md` for details.
 
 ## Scientific methodology
 
