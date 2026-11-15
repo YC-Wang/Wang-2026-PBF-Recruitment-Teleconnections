@@ -10,6 +10,10 @@ Original SST NetCDF data, observed recruitment extracted from the ISC assessment
 
 Table S3 uses archived derived DCPP predictor CSVs. It does not reproduce or redistribute raw DCPP SST through the Table S3 workflow.
 
+## CMIP6/DCPP attribution and licensing status
+
+The derived predictor CSVs are attributed to the CMIP6 Decadal Climate Prediction Project (DCPP); see the [official CMIP6 DCPP webpage](https://www.wcrp-climate.org/dcpp) and the [CMIP6 Terms of Use, version 6.2](https://pcmdi.llnl.gov/CMIP6/TermsOfUse/TermsOfUse6-2.html). The CSVs contain observational-SVD-projected predictors, not raw CMIP6/DCPP SST. The original model-specific source identifiers, dataset DOI/version/variant metadata, and current per-model license records were not recovered in this archive, so dataset-specific license verification is not independently established here. Inclusion records the current release decision and attribution; it is not a substitute for confirming the applicable upstream terms before redistribution or reuse.
+
 ## Recruitment source
 
 Observed recruitment is sourced from ISC (2022), Stock assessment of Pacific bluefin tuna in the Pacific Ocean in 2022, Figure 5-14, page 135. Source page: https://meetings.wcpfc.int/node/16246. Public accessibility does not establish redistribution permission.
