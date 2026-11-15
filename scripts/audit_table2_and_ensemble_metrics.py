@@ -1,7 +1,12 @@
+import argparse
 from pathlib import Path
 import numpy as np, pandas as pd
 from scipy.stats import pearsonr, bootstrap, linregress
-R=Path(__file__).resolve().parents[1]; O=R/'results/dcpp_table2_revision'; E=O/'ensemble_verification'; O.mkdir(parents=True,exist_ok=True); E.mkdir(exist_ok=True); years=np.arange(1981,2011); models=['GAM','RF'];
+R=Path(__file__).resolve().parents[1]
+parser=argparse.ArgumentParser(description='Recalculate DCPP Table 2 and ensemble verification metrics.')
+parser.add_argument('--output-dir', type=Path, default=R/'results/dcpp_table2_revision', help='Directory for all generated CSV and Markdown outputs.')
+args=parser.parse_args()
+O=args.output_dir.resolve(); E=O/'ensemble_verification'; O.mkdir(parents=True,exist_ok=True); E.mkdir(exist_ok=True); years=np.arange(1981,2011); models=['GAM','RF'];
 obs=np.log10(pd.read_csv(R/'data/raw/observed_recruitment_1981_2020.csv').set_index('year').loc[years,'recruitment'].to_numpy())
 def crps(x,y): x=np.sort(x); n=len(x); return np.mean(abs(x-y))-np.sum((2*np.arange(1,n+1)-n-1)*x)/n**2
 def ci(a,b):
