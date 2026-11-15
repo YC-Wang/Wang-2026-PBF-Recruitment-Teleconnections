@@ -1,0 +1,3 @@
+model,max_abs,mean_abs,rmse,mismatched_folds
+GAM,0.0,0.0,0.0,0
+RF,0.0,0.0,0.0,0
