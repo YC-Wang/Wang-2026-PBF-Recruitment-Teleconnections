@@ -1,0 +1,19 @@
+{
+  "n_samples": 500,
+  "n_workers": 8,
+  "seed": 42,
+  "runtime_seconds": 127.61182236671448,
+  "response_scale": "log10",
+  "independent_annual_normal_sampling": true,
+  "input_sha256": "a5b10b031e3c37cbc3007fc4e69959cceaedc59a30b2548064c3922a67e14120",
+  "python": "3.10.14 | packaged by conda-forge | (main, Mar 20 2024, 12:40:08) [MSC v.1938 64 bit (AMD64)]",
+  "platform": "Windows-10-10.0.26200-SP0",
+  "packages": {
+    "numpy": "2.2.6",
+    "pandas": "2.3.3",
+    "scipy": "1.15.3",
+    "scikit-learn": "1.7.2",
+    "pygam": "0.12.0",
+    "joblib": "1.6.0"
+  }
+}

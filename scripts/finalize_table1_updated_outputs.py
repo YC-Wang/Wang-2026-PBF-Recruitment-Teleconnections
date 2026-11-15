@@ -1,5 +1,4 @@
 from pathlib import Path
-import os
 import numpy as np, pandas as pd
 from scipy.stats import pearsonr
 from sklearn.metrics import mean_squared_error
@@ -10,8 +9,7 @@ y=hold.observed_log10_recruitment.to_numpy()
 svd=[]
 for m in ['GAM','RF']:
  p=hold[f'{m}_log10_prediction'].to_numpy(); svd.append(['SVD teleconnection indices',m,pearsonr(y,p).statistic,mean_squared_error(y,p),100*np.std(p,ddof=1)/np.mean(p)])
-old_path = Path(os.environ['PBF_DATA_ROOT']) / 'table1' / 'table1_reproduced_with_CI.csv'
-old=pd.read_csv(old_path)
+# Legacy comparison input is external and is not required for archived verification.
 lookup={('Regional SST','GAM'):(.455835,.039015,1.792176),('Regional SST','RF'):(.361083,.042914,1.526081),('PDO + AMO','GAM'):(.342664,.043758,1.528096),('PDO + AMO','RF'):(.150725,.055356,1.757635)}
 rows=svd+[[g,m,*lookup[(g,m)]] for g in ['Regional SST','PDO + AMO'] for m in ['GAM','RF']]
 table=pd.DataFrame(rows,columns=['Predictors','Model','r','MSE','CV (%)']); table['n_years']=40; table['target_scale']='log10(recruitment)'; table.to_csv(out/'table1_updated_loocv.csv',index=False)

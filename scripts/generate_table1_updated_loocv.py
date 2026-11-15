@@ -7,7 +7,7 @@ from sklearn.metrics import mean_squared_error
 from pygam import LinearGAM, s
 
 ROOT = Path(__file__).resolve().parents[1]
-ORIG = Path(os.environ['PBF_DATA_ROOT']) / 'table1'
+ORIG = ROOT / 'external_inputs/table1'
 OUT = ROOT / 'results/observational/table1_updated_loocv'; OUT.mkdir(parents=True, exist_ok=True)
 REC = ROOT / 'data/raw/observed_recruitment_1981_2020.csv'
 configs = {

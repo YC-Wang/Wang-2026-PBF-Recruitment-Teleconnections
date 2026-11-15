@@ -1,0 +1,15 @@
+{
+  "sampling_realizations": 500,
+  "years": 40,
+  "prediction_rows": 20000,
+  "gam_prediction_values": 20000,
+  "rf_prediction_values": 20000,
+  "checkpoint_files": 500,
+  "active_sampling_sha256": "a5b10b031e3c37cbc3007fc4e69959cceaedc59a30b2548064c3922a67e14120",
+  "archived_original_sha256": "5be88d200c07bffbd2d08ddd9f545db30f3f31761548180320a78f683234b7e8",
+  "new_sampling_sha256": "a5b10b031e3c37cbc3007fc4e69959cceaedc59a30b2548064c3922a67e14120",
+  "baseline_models_modified": false,
+  "baseline_uncertainty_outputs_overwritten": false,
+  "publication_repository_modified": false,
+  "loocv_complete": true
+}
