@@ -16,3 +16,4 @@ dependencies:
   - pip:
       - pygam==0.12.0
       - tomli==2.0.1
+      - forestci==0.9

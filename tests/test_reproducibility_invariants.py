@@ -23,10 +23,9 @@ def test_fold_predictor_structure_and_no_held_out_recruitment_leakage():
 def test_archived_output_schemas_and_uncertainty_separation():
     holdout=pd.read_csv(ROOT/"results/observational/holdout_svd_evaluation/heldout_predictions.csv")
     intervals=pd.read_csv(ROOT/"results/observational/figure4_corrected_loocv/annual_predictions_uncertainty.csv")
-    sampled=pd.read_csv(ROOT/"results/observational/recruitment_uncertainty/skill_metrics_500.csv")
     assert len(holdout)==len(intervals)==40
     assert {"GAM_log10_prediction","RF_log10_prediction"}.issubset(holdout.columns)
+    assert {"GAM_model_variance","RF_model_variance","GAM_data_variance","RF_data_variance"}.issubset(intervals.columns)
     assert {"GAM_PI_lower","GAM_PI_upper","RF_PI_lower","RF_PI_upper"}.issubset(intervals.columns)
-    assert {"correlation_sampled","rmse_sampled","Sim_ID"}.issubset(sampled.columns)
-    assert not {"GAM_PI_lower","RF_PI_lower"}.intersection(sampled.columns)
-    assert sorted(sampled.Sim_ID.unique())==list(range(1,501))
+    assert np.allclose(intervals["GAM_total_variance"], intervals["GAM_model_variance"] + intervals["GAM_data_variance"])
+    assert np.allclose(intervals["RF_total_variance"], intervals["RF_model_variance"] + intervals["RF_data_variance"])

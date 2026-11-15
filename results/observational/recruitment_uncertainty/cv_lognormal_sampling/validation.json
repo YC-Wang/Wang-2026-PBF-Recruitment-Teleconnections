@@ -1,0 +1,15 @@
+{
+  "years": 40,
+  "realizations": 500,
+  "finite": true,
+  "positive": true,
+  "duplicate_years": false,
+  "seed": 20261102,
+  "cv_assignment": {
+    "1981-1993": 0.21,
+    "1994-2016": 0.08,
+    "2017-2020": 0.325
+  },
+  "active_file_unchanged": true,
+  "format_compatible": true
+}

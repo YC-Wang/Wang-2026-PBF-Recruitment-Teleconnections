@@ -10,7 +10,7 @@ GAM and Random Forest models use the six predictors and 40-fold leave-one-year-o
 
 ## Uncertainty distinction
 
-Figure 4 prediction intervals combine model-estimation and residual-data uncertainty. Recruitment-assessment uncertainty propagates 500 sampled recruitment realizations through repeated model fitting. Figure R1 describes GAM effective degrees of freedom. These are separate quantities.
+Figure 4 prediction intervals combine model-estimation and residual-data uncertainty. GAM conditional-mean uncertainty is derived from the fitted GAM covariance intervals. RF model-estimation uncertainty uses the archived independent implementation of the uncalibrated forestci IJ core with finite-tree bias correction; the intended direct call is `forestci.random_forest_error(..., calibrate=False)`. `calibrate=True` is not used. `forestci==0.9` is now declared and passes an isolated compatibility smoke test with the pinned NumPy/SciPy/scikit-learn stack, but archived values were not overwritten or recalibrated. Direct numerical agreement against the archived values cannot be measured from this public release because fitted RF forests and training matrices are external. Cross-validated residual/data variability is estimated separately by inner five-fold CV. Figure R1 describes GAM effective degrees of freedom. These quantities are distinct from recruitment-assessment Monte Carlo uncertainty, which is outside this release.
 
 ## Table S3
 
@@ -32,6 +32,8 @@ Each observational fold uses 39 training years. Training climatologies are used 
 
 The retained PHASE7A_MODEL_INVENTORY.md and PHASE7A_MODEL_CHECKSUMS.csv are KEEP files. They document 40 saved GAM and 40 saved Random Forest SVD-family models, their predictor order, fold structure, configuration, environment versions, and per-file checksums. No saved RegSST or PDO/AMO model-pickle collections were located; their archived metrics must not be presented as having the same saved-model provenance.
 
-## Recruitment uncertainty provenance
+## Final recruitment uncertainty experiment
 
-The optional recruitment-response workflow refits observational models for assessment-derived recruitment realizations. The preserved realization input is positive log10 recruitment; the source procedure records independent annual normal draws with year-specific standard deviations and seed 123. The workflow does not apply a second log transform. Annual independence and unknown joint assessment-error structure remain limitations. A baseline validation and five-realization smoke test are retained; the full run was not independently launched in this publication environment.
+The authoritative final experiment uses 500 mean-preserving lognormal recruitment realizations generated with `default_rng(20261102)`. Year-specific ISC period-average CVs are 0.21 for 1981–1993, 0.08 for 1994–2016, and 0.325 for 2017–2020. The active realization file is positive finite `log10(recruitment)` data with 500 IDs × 40 years and SHA-256 `A5B10B031E3C37CBC3007FC4E69959CCEAEDC59A30B2548064C3922A67E14120`. Final model-skill summaries, annual uncertainty results, Figure R2, and Table S2.1 are retained under `results/observational/recruitment_uncertainty/cv_lognormal_2026/`.
+
+The earlier seed-123 independent-normal-draw experiment and its reports, input, predictions, figures, and diagnostics are excluded. The final CV-based products are archived scientific results; full repeated refitting remains dependent on external fitted models and approved inputs.

@@ -24,15 +24,16 @@ The evaluation and fitting pathways require approved external recruitment, fold 
 
     python scripts/improve_supplementary_prediction_intervals.py
     python scripts/plot_figure_R1_GAM_EDF_archived.py
-    python scripts/plot_recruitment_uncertainty_log10.py
+
+## Final recruitment uncertainty
+
+The retained experiment uses 500 mean-preserving lognormal recruitment realizations, seed `20261102`, and year-specific ISC period-average CVs: 0.21 for 1981–1993, 0.08 for 1994–2016, and 0.325 for 2017–2020.
+
+    python scripts/reconstruct_recruitment_cv_lognormal.py
+
+The approved final prediction, Figure R2, and Table S2.1 products are under `results/observational/recruitment_uncertainty/cv_lognormal_2026/`. Full repeated GAM/RF refitting requires the external model artifacts and approved inputs documented there; do not confuse these products with the superseded seed-123 normal-draw experiment, which is not included.
 
 These pathways do not regenerate raw SST, recruitment realizations, fitted models, or prediction intervals.
-
-## Recruitment uncertainty
-
-    python scripts/run_recruitment_uncertainty_portable.py --n-samples 5 --output-dir <isolated-directory>
-
-The full 500-realization workflow is not independently rerun in this publication environment.
 
 ## Table S3
 
@@ -48,4 +49,4 @@ The saved observational SVD-family model inventory and per-file checksums are re
 
 ## Verification boundaries
 
-Archived-output Figure 4 and Figure R1 pathways, archived Table 1 SVD rows, the Table S3 isolated reproduction, and the documented five-realization smoke test have recorded validation evidence. Raw SST/SVD preprocessing, the complete 500-realization run, and workflows requiring external model or recruitment files remain PARTIAL, BLOCKED, or NOT TESTED as indicated by the relevant result README.
+Archived-output Figure 4 and Figure R1 pathways, archived Table 1 SVD rows, Table S2.1/CV-based recruitment-uncertainty products, and the Table S3 isolated reproduction have recorded validation evidence. Raw SST/SVD preprocessing and workflows requiring external model or recruitment files remain PARTIAL, BLOCKED, or NOT TESTED. The earlier seed-123 recruitment Monte Carlo experiment is excluded.

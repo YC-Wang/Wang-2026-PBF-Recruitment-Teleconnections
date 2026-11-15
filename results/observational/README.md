@@ -6,7 +6,7 @@ This directory contains retained observational outputs for the recruitment predi
 
 ## Methodology
 
-Predictors use fold-specific SST/SVD processing over 1981–2020. GAM and Random Forest models use 40-fold leave-one-year-out cross-validation. Figure 4 separates model/data-error prediction intervals from recruitment-assessment uncertainty. Figure R1 summarizes GAM effective degrees of freedom.
+Predictors use fold-specific SST/SVD processing over 1981–2020. GAM and Random Forest models use 40-fold leave-one-year-out cross-validation. Figure 4 separates GAM conditional-mean uncertainty, RF infinitesimal-jackknife estimation uncertainty, and cross-validated residual/data variability. Figure R1 summarizes GAM effective degrees of freedom. The final recruitment-assessment experiment is a separate CV-based lognormal workflow.
 
 ## Results and interpretation
 
